@@ -171,7 +171,11 @@ class DblSidedTool(FlatCAMTool):
         mode = self.axis_location.get_value()
 
         if mode == "point":
-            px, py = self.point.get_value()
+            point = self.point.get_value()
+            if point is None or len(point) != 2:
+                self.app.inform.emit("ERROR: No point was specified in point mode.")
+                return
+            px, py = point
         else:
             selection_index = self.box_combo.currentIndex()
             bb_obj = self.app.collection.object_list[selection_index]  # TODO: Direct access??
